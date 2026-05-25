@@ -1,0 +1,88 @@
+.form {
+  max-width: 560px;
+  background: var(--color-surface-raised);
+  padding: 2rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--color-border);
+}
+
+.form h2 {
+  color: var(--color-title);
+}
+
+.field {
+  margin-bottom: 1.25rem;
+}
+
+.field label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+  color: var(--color-pink);
+}
+
+.field input,
+.field select,
+.field textarea {
+  width: 100%;
+  padding: 0.65rem 0.85rem;
+  font-size: 1rem;
+  font-family: inherit;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  background: var(--color-black);
+  color: var(--color-pink);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: 2px solid var(--color-pink);
+  border-color: var(--color-pink);
+}
+
+.field textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.checklist {
+  background: var(--color-surface-raised);
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  border: 1px solid var(--color-border);
+}
+
+.checklist h2,
+.checklist h3 {
+  color: var(--color-title);
+}
+
+.checklist p,
+.checklist li {
+  color: var(--color-text-muted);
+}
+
+.checklist ul {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.checklist li {
+  margin-bottom: 0.5rem;
+}
+
+.grid {
+  display: grid;
+  gap: 2rem;
+  grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
