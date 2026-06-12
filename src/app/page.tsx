@@ -15,9 +15,6 @@ export default function HomePage() {
             <Link href="/sports" className="btn btn-primary">
               Explore sports
             </Link>
-            <Link href="/recruiting" className="btn btn-outline">
-              Recruit me
-            </Link>
           </div>
         </div>
       </section>
