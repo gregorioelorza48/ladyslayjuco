@@ -49,7 +49,7 @@ export const site = {
   schoolName: "Lady Slay D123",
   programName: "Women's Athletics",
   tagline: "Compete with purpose. Graduate with pride.",
-  
+  njcaa: "D123 Women's Athletics",
 };
 
 export const sports: Sport[] = [
