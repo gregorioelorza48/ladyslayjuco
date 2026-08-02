@@ -11,7 +11,7 @@ export default function SportsPage() {
       <div className="page-hero">
         <div className="container">
           <h1>Sports</h1>
-          <p>Women&apos;s varsity programs at the junior college level.</p>
+          <p></p>
         </div>
       </div>
       <section className="section">

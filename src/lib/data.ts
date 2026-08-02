@@ -29,207 +29,112 @@ export interface Player {
   hometown: string;
 }
 
+export type NewsBlock =
+  | { type: "text"; value: string }
+  | { type: "image"; src: string; alt: string };
+
 export interface NewsArticle {
   id: string;
   title: string;
   excerpt: string;
   date: string;
   sport?: SportSlug;
+  coverImage?: string;
+  blocks?: NewsBlock[];
+  body?: string[];
+  sourceUrl?: string;
 }
 
 export const site = {
-  schoolName: "Lady Slay JUCO",
+  schoolName: "Lady Slay D123",
   programName: "Women's Athletics",
   tagline: "Compete with purpose. Graduate with pride.",
-  njcaa: "NJCAA Region XIV",
+  
 };
 
 export const sports: Sport[] = [
-  {
-    slug: "volleyball",
-    name: "Volleyball",
-    season: "Fall 2025",
-    record: "18–6",
-    nextGame: "vs. Tyler JC — Sat, Oct 12, 2:00 PM",
-    description:
-      "Our nationally competitive program builds leaders on and off the court.",
-  },
-  {
-    slug: "basketball",
-    name: "Basketball",
-    season: "Winter 2025–26",
-    record: "12–4",
-    nextGame: "at Blinn College — Thu, Jan 9, 5:30 PM",
-    description:
-      "Fast-paced, team-first basketball in the heart of Texas junior college athletics.",
-  },
-  {
-    slug: "soccer",
-    name: "Soccer",
-    season: "Fall 2025",
-    record: "14–3–2",
-    nextGame: "vs. Angelina College — Fri, Oct 18, 4:00 PM",
-    description:
-      "Technical skill and relentless effort define our women's soccer program.",
-  },
-  {
-    slug: "softball",
-    name: "Softball",
-    season: "Spring 2026",
-    record: "Season opens Feb",
-    description:
-      "Championship culture, strong pitching, and a family atmosphere in the dugout.",
-  },
+  
+
 ];
 
 export const games: Game[] = [
-  {
-    id: "1",
-    sport: "volleyball",
-    date: "Oct 5, 2025",
-    time: "2:00 PM",
-    opponent: "Kilgore College",
-    location: "Home",
-    result: "W 3–1",
-  },
-  {
-    id: "2",
-    sport: "volleyball",
-    date: "Oct 12, 2025",
-    time: "2:00 PM",
-    opponent: "Tyler Junior College",
-    location: "Home",
-  },
-  {
-    id: "3",
-    sport: "basketball",
-    date: "Jan 4, 2026",
-    time: "5:30 PM",
-    opponent: "Coastal Bend College",
-    location: "Home",
-  },
-  {
-    id: "4",
-    sport: "basketball",
-    date: "Jan 9, 2026",
-    time: "5:30 PM",
-    opponent: "Blinn College",
-    location: "Away",
-  },
-  {
-    id: "5",
-    sport: "soccer",
-    date: "Oct 18, 2025",
-    time: "4:00 PM",
-    opponent: "Angelina College",
-    location: "Home",
-  },
-  {
-    id: "6",
-    sport: "soccer",
-    date: "Oct 22, 2025",
-    time: "1:00 PM",
-    opponent: "McLennan College",
-    location: "Away",
-    result: "W 2–0",
-  },
+  
+  
 ];
 
 export const players: Player[] = [
-  {
-    id: "1",
-    sport: "volleyball",
-    number: 7,
-    name: "Jordan Martinez",
-    position: "Outside Hitter",
-    year: "Sophomore",
-    hometown: "Houston, TX",
-  },
-  {
-    id: "2",
-    sport: "volleyball",
-    number: 12,
-    name: "Avery Chen",
-    position: "Setter",
-    year: "Freshman",
-    hometown: "San Antonio, TX",
-  },
-  {
-    id: "3",
-    sport: "volleyball",
-    number: 3,
-    name: "Taylor Brooks",
-    position: "Libero",
-    year: "Sophomore",
-    hometown: "Dallas, TX",
-  },
-  {
-    id: "4",
-    sport: "basketball",
-    number: 23,
-    name: "Mia Johnson",
-    position: "Guard",
-    year: "Sophomore",
-    hometown: "Austin, TX",
-  },
-  {
-    id: "5",
-    sport: "basketball",
-    number: 11,
-    name: "Destiny Williams",
-    position: "Forward",
-    year: "Freshman",
-    hometown: "Beaumont, TX",
-  },
-  {
-    id: "6",
-    sport: "soccer",
-    number: 9,
-    name: "Sofia Ramirez",
-    position: "Forward",
-    year: "Sophomore",
-    hometown: "Corpus Christi, TX",
-  },
-  {
-    id: "7",
-    sport: "soccer",
-    number: 1,
-    name: "Emma Davis",
-    position: "Goalkeeper",
-    year: "Freshman",
-    hometown: "Lubbock, TX",
-  },
+  
+  
+  
 ];
 
 export const news: NewsArticle[] = [
   {
-    id: "1",
-    title: "Volleyball earns top seed in region tournament",
+    id: "4",
+    title: "Mizzou Women's Basketball Team Receives Five Promising Players",
     excerpt:
-      "The Lady Bears clinch the No. 1 seed after a dominant weekend at home.",
-    date: "Oct 1, 2025",
-    sport: "volleyball",
-  },
-  {
-    id: "2",
-    title: "Basketball opens conference play in January",
-    excerpt:
-      "Coach Patterson previews the 2025–26 schedule and returning starters.",
-    date: "Dec 15, 2025",
+      "As the new school year begins, sports teams across the country receive incoming players, whether they are freshman athletes excited to start their collegiate journey or older students looking for a change of pace.",
+    date: "Aug 2, 2026",
     sport: "basketball",
+    coverImage: "/images/news/mizzou-wbb-recruits-1.png",
+    blocks: [
+      {
+        type: "image",
+        src: "/images/news/mizzou-wbb-recruits-1.png",
+        alt: "Mizzou Women's Basketball incoming recruits",
+      },
+      {
+        type: "text",
+        value: "(Sourced from the Mizzou Women's Basketball Instagram)",
+      },
+      {
+        type: "text",
+        value:
+          "The Mizzou Women's basketball team has five incoming students to their team. Natalya Hodges, are eager to start the season. Hodges, who is from Knoxville, Tennessee, will be starting on the Mizzou Women's basketball team as guard. She has a well-built career as a player with a score of over 3,000 points and three appearances at state tournament appearances. Hodges says she chose Mizzou because of how \"the staff came together and how family oriented they is.\" She also appreciated how dedicated the coaches and staff are in \"what they should do and how they should teach us and what we should grow into.\" Feeling at home with a team is what makes a great team both on and off the court.",
+      },
+      {
+        type: "text",
+        value:
+          "Jada Maples is another incoming player to the Mizzou Women's Basketball team. Maples is another great addition to the team who comes from Earle Arkansas and will be playing guard on the team. She went to Arkansas' state championship earlier this year and was named Class 1A's Most Outstanding Player. This year she also signed a collab deal with Primetime Lab, which is a hub for basketball training based out of West Memphis, Arkansas. Among her numerous offers she chose Mizzou as her home for the next four years because she feels good about \"what's to come on the team\" and she believes that she will be able to help with the progress of the program.",
+      },
+      {
+        type: "text",
+        value:
+          "Ellie Muller is another incoming freshman to the team. She comes from West Des Moines, Iowa and will be playing forward in the new school year. She's been to the Iowa State championships four times along with being selected for Iowa All-State. She currently has a career record of 300 blocks as well as 1,000 career rebounds and her totals will grow as she joins Mizzou's ranks. Muller chose Mizzou because when she talked to the team's coach and was on campus, she said she could \"see herself here\" in the future.",
+      },
+      {
+        type: "text",
+        value:
+          "Khloe Ford is a four-time state champion from Hoover, Alabama and another incoming freshman on the Mizzou Women's basketball team. She is a forward player and she has numerous achievements such as the Birmingham Region Player of the Year and Miss Basketball for the state of Alabama. Ford picked Mizzou out of her numerous offers because when she was touring other schools during her senior year she \"just kept thinking about Missouri\" and she knew that \"Missouri was home.\" The final incoming freshman on the Mizzou Women's basketball team is Cecile Brandimore. She is a two-time Tennessee all-state selection and has over 2,000 career points. She chose Mizzou as her place to be for the next four years because Mizzou had more benefits than \"downfalls.\"",
+      },
+      {
+        type: "text",
+        value:
+          "With this new bunch of players, Mizzou may be shaping up to have a better season than in the past couple of years.",
+      },
+      {
+        type: "image",
+        src: "/images/news/mizzou-wbb-recruits-2.png",
+        alt: "Mizzou Women's Basketball team photo",
+      },
+      {
+        type: "text",
+        value: "(Sourced from the Mizzou Women's Basketball Instagram)",
+      },
+    ],
+    sourceUrl:
+      "https://mutigers.com/sports/womens-basketball/news/year/2024?page=6&view=list",
   },
-  {
-    id: "3",
-    title: "Soccer signs three All-Region honorees",
-    excerpt:
-      "Program recognition highlights another historic fall on the pitch.",
-    date: "Nov 20, 2025",
-    sport: "soccer",
-  },
+  
+  
 ];
 
 export function getSport(slug: string): Sport | undefined {
   return sports.find((s) => s.slug === slug);
+}
+
+export function getNewsArticle(id: string): NewsArticle | undefined {
+  return news.find((a) => a.id === id);
 }
 
 export function getGamesBySport(slug: SportSlug): Game[] {

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import SportCard from "@/components/SportCard";
 import { site, sports, news } from "@/lib/data";
@@ -26,27 +27,18 @@ export default function HomePage() {
               <span className={styles.statValue}>4</span>
               <span className={styles.statLabel}>Varsity sports</span>
             </div>
-            <div>
-              <span className={styles.statValue}>120+</span>
-              <span className={styles.statLabel}>Student-athletes</span>
-            </div>
-            <div>
-              <span className={styles.statValue}>12</span>
-              <span className={styles.statLabel}>Region titles</span>
-            </div>
-            <div>
-              <span className={styles.statValue}>94%</span>
-              <span className={styles.statLabel}>Transfer rate</span>
-            </div>
+          
+        
+         
           </div>
         </div>
       </section>
 
       <section className="section">
         <div className="container">
-          <h2 className="section-title">Our sports</h2>
+          <h2 className="section-title">Womens D123 sports</h2>
           <p className="section-subtitle">
-            NJCAA women&apos;s programs built for competition and academic success.
+            
           </p>
           <div className="card-grid">
             {sports.map((sport) => (
@@ -63,11 +55,24 @@ export default function HomePage() {
           <ul className={styles.newsList}>
             {news.map((article) => (
               <li key={article.id} className={styles.newsItem}>
-                <p className={styles.newsDate}>{article.date}</p>
-                <h3>
-                  <Link href="/news">{article.title}</Link>
-                </h3>
-                <p>{article.excerpt}</p>
+                {article.coverImage && (
+                  <Link href={`/news/${article.id}`} className={styles.newsThumb}>
+                    <Image
+                      src={article.coverImage}
+                      alt=""
+                      width={640}
+                      height={360}
+                      sizes="(max-width: 768px) 100vw, 320px"
+                    />
+                  </Link>
+                )}
+                <div>
+                  <p className={styles.newsDate}>{article.date}</p>
+                  <h3>
+                    <Link href={`/news/${article.id}`}>{article.title}</Link>
+                  </h3>
+                  <p>{article.excerpt}</p>
+                </div>
               </li>
             ))}
           </ul>
@@ -79,18 +84,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className={`section ${styles.cta}`}>
-        <div className="container">
-          <h2>Interested in playing here?</h2>
-          <p>
-            Connect with our coaching staff, schedule a campus visit, and learn about
-            eligibility requirements for junior college athletics.
-          </p>
-          <Link href="/recruiting" className="btn btn-primary">
-            Start recruiting
-          </Link>
-        </div>
-      </section>
+      
     </>
   );
 }

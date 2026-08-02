@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     template: `%s | ${site.programName}`,
   },
   description:
-    "Official women's junior college athletics — schedules, rosters, news, and recruiting.",
+    "Official women's D123 college athletics — schedules, rosters, news, and recruiting.",
 };
 
 export default function RootLayout({
