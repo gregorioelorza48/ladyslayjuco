@@ -120,6 +120,17 @@ h4 {
   color: var(--color-black);
 }
 
+.btn-secondary {
+  background: var(--color-surface-raised);
+  color: var(--color-pink-light);
+  border-color: var(--color-border);
+}
+
+.btn-secondary:hover {
+  border-color: var(--color-pink);
+  color: var(--color-pink);
+}
+
 .badge {
   display: inline-block;
   padding: 0.25rem 0.6rem;

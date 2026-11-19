@@ -1,0 +1,39 @@
+.ticker {
+  /* Higher = slower. Try: 40s (fast), 70s (default), 100s (slow), 140s (very slow) */
+  --ticker-duration: 140s;
+  overflow: hidden;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-surface-raised);
+  color: var(--color-pink-light);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.track {
+  display: flex;
+  width: max-content;
+  animation: ticker var(--ticker-duration) linear infinite;
+}
+
+.text {
+  margin: 0;
+  padding: 0.65rem 0;
+  padding-right: 3rem;
+}
+
+@keyframes ticker {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track {
+    animation: none;
+  }
+}

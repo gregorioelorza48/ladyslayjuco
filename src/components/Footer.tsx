@@ -36,6 +36,9 @@ export default function Footer() {
               <li>
                 <Link href="/news">News &amp; updates</Link>
               </li>
+              <li>
+                <Link href="/admin/login">Admin login</Link>
+              </li>
             </ul>
           </div>
         </div>

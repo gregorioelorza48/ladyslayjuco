@@ -1,0 +1,33 @@
+.back {
+  margin: 0 0 0.75rem;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+.meta {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin: 0 0 0.5rem;
+}
+
+.article {
+  max-width: 720px;
+}
+
+.figure {
+  margin: 0 0 1.5rem;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  border-radius: var(--radius);
+  border: 1px solid var(--color-border);
+}
+
+.body {
+  margin: 0;
+  white-space: pre-wrap;
+  color: var(--color-pink);
+  line-height: 1.7;
+}
