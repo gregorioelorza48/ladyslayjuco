@@ -74,94 +74,31 @@ function parseFields(formData: FormData) {
   };
 }
 
-async function getRequestOrigin() {
-  const configured = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
-  if (configured) return configured;
-
-  const { headers } = await import("next/headers");
-  const h = await headers();
-  const host = h.get("x-forwarded-host") || h.get("host");
-  const proto = h.get("x-forwarded-proto") || "https";
-  if (host) return `${proto}://${host}`;
-  return "http://localhost:3000";
-}
-
-export async function requestMagicLink(formData: FormData) {
+export async function signInWithPassword(formData: FormData) {
   const email = String(formData.get("email") ?? "")
     .toLowerCase()
     .trim();
+  const password = String(formData.get("password") ?? "");
   const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase().trim();
 
   if (!adminEmail || email !== adminEmail) {
     redirect("/admin/login?error=forbidden");
   }
+  if (!password) {
+    redirect(
+      `/admin/login?error=auth&detail=${encodeURIComponent("Password is required.")}`,
+    );
+  }
 
   const supabase = await createClient();
-  const origin = await getRequestOrigin();
-
-  // Sends an email with a one-time code (and usually a link).
-  // Prefer entering the code on this page — avoids PKCE browser mismatch.
-  const { error } = await supabase.auth.signInWithOtp({
+  const { error } = await supabase.auth.signInWithPassword({
     email,
-    options: {
-      emailRedirectTo: `${origin}/auth/callback?next=/admin`,
-      shouldCreateUser: true,
-    },
+    password,
   });
 
   if (error) {
-    console.error("signInWithOtp failed", error.message, error);
     redirect(
-      `/admin/login?error=send&detail=${encodeURIComponent(error.message)}`,
-    );
-  }
-
-  redirect(`/admin/login?sent=1&email=${encodeURIComponent(email)}`);
-}
-
-export async function verifyEmailCode(formData: FormData) {
-  const email = String(formData.get("email") ?? "")
-    .toLowerCase()
-    .trim();
-  const token = String(formData.get("token") ?? "")
-    .trim()
-    .replace(/\s+/g, "");
-  const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase().trim();
-
-  if (!adminEmail || email !== adminEmail) {
-    redirect("/admin/login?error=forbidden");
-  }
-  if (!token) {
-    redirect(
-      `/admin/login?sent=1&email=${encodeURIComponent(email)}&error=auth&detail=${encodeURIComponent("Enter the code from your email.")}`,
-    );
-  }
-
-  const supabase = await createClient();
-
-  let error =
-    (
-      await supabase.auth.verifyOtp({
-        email,
-        token,
-        type: "email",
-      })
-    ).error ?? null;
-
-  if (error) {
-    error =
-      (
-        await supabase.auth.verifyOtp({
-          email,
-          token,
-          type: "magiclink",
-        })
-      ).error ?? error;
-  }
-
-  if (error) {
-    redirect(
-      `/admin/login?sent=1&email=${encodeURIComponent(email)}&error=auth&detail=${encodeURIComponent(error.message)}`,
+      `/admin/login?error=auth&detail=${encodeURIComponent(error.message)}`,
     );
   }
 
