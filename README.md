@@ -34,12 +34,20 @@ Do **not** add `SUPABASE_SERVICE_ROLE_KEY` to this app or commit any secrets. `.
 1. Create a Supabase project.
 2. Run [`supabase/schema.sql`](supabase/schema.sql) in the SQL Editor (replace `YOUR_ADMIN_EMAIL@example.com` with your email — same as `ADMIN_EMAIL`).
 3. Authentication → Providers → enable Email (magic link).
-4. Authentication → URL configuration → redirect URLs:
-   - `http://localhost:3000/auth/callback`
-   - `https://ladyslayd123.vercel.app/auth/callback`
-5. Confirm the `post-images` storage bucket exists (created by the SQL).
+4. Authentication → URL configuration:
+   - Site URL: `https://ladyslayd123.vercel.app`
+   - Redirect URLs:
+     - `http://localhost:3000/auth/callback`
+     - `https://ladyslayd123.vercel.app/auth/callback`
+5. Authentication → Email Templates → **Magic Link** — set the button/link URL to:
 
-Then open `/admin/login`, request a magic link, and publish a test post.
+```html
+<a href="{{ .SiteURL }}/auth/callback?token_hash={{ .TokenHash }}&type=email&next=/admin">Log in</a>
+```
+
+6. Confirm the `post-images` storage bucket exists (created by the SQL).
+
+Then open `/admin/login`, request a magic link, and publish a test post. Open the email on the same device when possible.
 
 ## Pages
 

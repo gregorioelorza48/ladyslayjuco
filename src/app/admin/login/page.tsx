@@ -51,8 +51,21 @@ export default async function AdminLoginPage({ searchParams }: Props) {
             {params.error === "auth" && (
               <p className={`${styles.message} ${styles.error}`}>
                 Login link expired or invalid. Request a new one.
+                {params.detail ? (
+                  <>
+                    <br />
+                    <span style={{ fontSize: "0.85rem" }}>
+                      Details: {params.detail}
+                    </span>
+                  </>
+                ) : null}
               </p>
             )}
+            <p className={styles.message}>
+              Tip: after you request a link, open the email on this same phone
+              or computer. If it still fails, update the Magic Link template in
+              Supabase (see README).
+            </p>
             <form action={requestMagicLink} className={styles.form}>
               <label className={styles.label}>
                 Email
