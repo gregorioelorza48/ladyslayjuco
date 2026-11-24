@@ -74,6 +74,18 @@ function parseFields(formData: FormData) {
   };
 }
 
+async function getRequestOrigin() {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+  if (configured) return configured;
+
+  const { headers } = await import("next/headers");
+  const h = await headers();
+  const host = h.get("x-forwarded-host") || h.get("host");
+  const proto = h.get("x-forwarded-proto") || "https";
+  if (host) return `${proto}://${host}`;
+  return "http://localhost:3000";
+}
+
 export async function requestMagicLink(formData: FormData) {
   const email = String(formData.get("email") ?? "")
     .toLowerCase()
@@ -85,9 +97,7 @@ export async function requestMagicLink(formData: FormData) {
   }
 
   const supabase = await createClient();
-  const origin =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ||
-    "http://localhost:3000";
+  const origin = await getRequestOrigin();
 
   const { error } = await supabase.auth.signInWithOtp({
     email,
