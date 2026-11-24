@@ -1,4 +1,4 @@
-import { requestMagicLink } from "@/app/admin/actions";
+import { requestMagicLink, verifyEmailCode } from "@/app/admin/actions";
 import styles from "../admin.module.css";
 
 export const dynamic = "force-dynamic";
@@ -8,18 +8,25 @@ export const metadata = {
 };
 
 type Props = {
-  searchParams: Promise<{ error?: string; sent?: string; detail?: string }>;
+  searchParams: Promise<{
+    error?: string;
+    sent?: string;
+    detail?: string;
+    email?: string;
+  }>;
 };
 
 export default async function AdminLoginPage({ searchParams }: Props) {
   const params = await searchParams;
+  const email =
+    params.email?.toLowerCase().trim() || "gregorioelorza48@gmail.com";
 
   return (
     <>
       <div className="page-hero">
         <div className="container">
           <h1>Admin</h1>
-          <p>Sign in with a magic link to publish short-form posts.</p>
+          <p>Sign in with an email code to publish short-form posts.</p>
         </div>
       </div>
       <section className="section">
@@ -27,7 +34,8 @@ export default async function AdminLoginPage({ searchParams }: Props) {
           <div className={styles.panel}>
             {params.sent && (
               <p className={`${styles.message} ${styles.success}`}>
-                Check your email for the login link.
+                Check your email for a one-time code, then enter it below.
+                Don&apos;t click the email link if it fails — use the code.
               </p>
             )}
             {params.error === "forbidden" && (
@@ -37,7 +45,7 @@ export default async function AdminLoginPage({ searchParams }: Props) {
             )}
             {params.error === "send" && (
               <p className={`${styles.message} ${styles.error}`}>
-                Could not send the magic link.
+                Could not send the login email.
                 {params.detail ? (
                   <>
                     <br />
@@ -50,7 +58,7 @@ export default async function AdminLoginPage({ searchParams }: Props) {
             )}
             {params.error === "auth" && (
               <p className={`${styles.message} ${styles.error}`}>
-                Login link expired or invalid. Request a new one.
+                Code expired or invalid. Request a new one.
                 {params.detail ? (
                   <>
                     <br />
@@ -61,27 +69,63 @@ export default async function AdminLoginPage({ searchParams }: Props) {
                 ) : null}
               </p>
             )}
-            <p className={styles.message}>
-              Tip: after you request a link, open the email on this same phone
-              or computer. If it still fails, update the Magic Link template in
-              Supabase (see README).
-            </p>
-            <form action={requestMagicLink} className={styles.form}>
-              <label className={styles.label}>
-                Email
-                <input
-                  className={styles.input}
-                  type="email"
-                  name="email"
-                  required
-                  autoComplete="email"
-                  defaultValue="gregorioelorza48@gmail.com"
-                />
-              </label>
-              <button type="submit" className="btn btn-primary">
-                Send magic link
-              </button>
-            </form>
+
+            {!params.sent ? (
+              <form action={requestMagicLink} className={styles.form}>
+                <label className={styles.label}>
+                  Email
+                  <input
+                    className={styles.input}
+                    type="email"
+                    name="email"
+                    required
+                    autoComplete="email"
+                    defaultValue={email}
+                  />
+                </label>
+                <button type="submit" className="btn btn-primary">
+                  Send login code
+                </button>
+              </form>
+            ) : (
+              <form action={verifyEmailCode} className={styles.form}>
+                <input type="hidden" name="email" value={email} />
+                <label className={styles.label}>
+                  Email
+                  <input
+                    className={styles.input}
+                    type="email"
+                    value={email}
+                    disabled
+                    readOnly
+                  />
+                </label>
+                <label className={styles.label}>
+                  One-time code from email
+                  <input
+                    className={styles.input}
+                    type="text"
+                    name="token"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    required
+                    placeholder="123456"
+                  />
+                </label>
+                <button type="submit" className="btn btn-primary">
+                  Verify and sign in
+                </button>
+              </form>
+            )}
+
+            {params.sent && (
+              <form action={requestMagicLink} className={styles.form} style={{ marginTop: "1rem" }}>
+                <input type="hidden" name="email" value={email} />
+                <button type="submit" className="btn btn-secondary">
+                  Resend code
+                </button>
+              </form>
+            )}
           </div>
         </div>
       </section>

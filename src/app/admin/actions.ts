@@ -99,6 +99,8 @@ export async function requestMagicLink(formData: FormData) {
   const supabase = await createClient();
   const origin = await getRequestOrigin();
 
+  // Sends an email with a one-time code (and usually a link).
+  // Prefer entering the code on this page — avoids PKCE browser mismatch.
   const { error } = await supabase.auth.signInWithOtp({
     email,
     options: {
@@ -114,7 +116,56 @@ export async function requestMagicLink(formData: FormData) {
     );
   }
 
-  redirect("/admin/login?sent=1");
+  redirect(`/admin/login?sent=1&email=${encodeURIComponent(email)}`);
+}
+
+export async function verifyEmailCode(formData: FormData) {
+  const email = String(formData.get("email") ?? "")
+    .toLowerCase()
+    .trim();
+  const token = String(formData.get("token") ?? "")
+    .trim()
+    .replace(/\s+/g, "");
+  const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase().trim();
+
+  if (!adminEmail || email !== adminEmail) {
+    redirect("/admin/login?error=forbidden");
+  }
+  if (!token) {
+    redirect(
+      `/admin/login?sent=1&email=${encodeURIComponent(email)}&error=auth&detail=${encodeURIComponent("Enter the code from your email.")}`,
+    );
+  }
+
+  const supabase = await createClient();
+
+  let error =
+    (
+      await supabase.auth.verifyOtp({
+        email,
+        token,
+        type: "email",
+      })
+    ).error ?? null;
+
+  if (error) {
+    error =
+      (
+        await supabase.auth.verifyOtp({
+          email,
+          token,
+          type: "magiclink",
+        })
+      ).error ?? error;
+  }
+
+  if (error) {
+    redirect(
+      `/admin/login?sent=1&email=${encodeURIComponent(email)}&error=auth&detail=${encodeURIComponent(error.message)}`,
+    );
+  }
+
+  redirect("/admin");
 }
 
 export async function signOut() {
