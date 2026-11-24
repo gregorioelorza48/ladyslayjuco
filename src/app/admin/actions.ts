@@ -74,6 +74,18 @@ function parseFields(formData: FormData) {
   };
 }
 
+async function getRequestOrigin() {
+  const configured = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
+  if (configured) return configured;
+
+  const { headers } = await import("next/headers");
+  const h = await headers();
+  const host = h.get("x-forwarded-host") || h.get("host");
+  const proto = h.get("x-forwarded-proto") || "https";
+  if (host) return `${proto}://${host}`;
+  return "http://localhost:3000";
+}
+
 export async function signInWithPassword(formData: FormData) {
   const email = String(formData.get("email") ?? "")
     .toLowerCase()
@@ -99,6 +111,67 @@ export async function signInWithPassword(formData: FormData) {
   if (error) {
     redirect(
       `/admin/login?error=auth&detail=${encodeURIComponent(error.message)}`,
+    );
+  }
+
+  redirect("/admin");
+}
+
+export async function requestPasswordReset(formData: FormData) {
+  const email = String(formData.get("email") ?? "")
+    .toLowerCase()
+    .trim();
+  const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase().trim();
+
+  if (!adminEmail || email !== adminEmail) {
+    redirect("/admin/login?error=forbidden");
+  }
+
+  const supabase = await createClient();
+  const origin = await getRequestOrigin();
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    redirectTo: `${origin}/auth/callback?next=/admin/reset-password`,
+  });
+
+  if (error) {
+    redirect(
+      `/admin/login?error=auth&detail=${encodeURIComponent(error.message)}`,
+    );
+  }
+
+  redirect("/admin/login?reset=sent");
+}
+
+export async function updatePassword(formData: FormData) {
+  const password = String(formData.get("password") ?? "");
+  const confirm = String(formData.get("confirm") ?? "");
+
+  if (password.length < 8) {
+    redirect(
+      `/admin/reset-password?error=${encodeURIComponent("Password must be at least 8 characters.")}`,
+    );
+  }
+  if (password !== confirm) {
+    redirect(
+      `/admin/reset-password?error=${encodeURIComponent("Passwords do not match.")}`,
+    );
+  }
+
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    redirect(
+      `/admin/login?error=auth&detail=${encodeURIComponent("Reset link expired. Request a new password reset.")}`,
+    );
+  }
+
+  const { error } = await supabase.auth.updateUser({ password });
+  if (error) {
+    redirect(
+      `/admin/reset-password?error=${encodeURIComponent(error.message)}`,
     );
   }
 

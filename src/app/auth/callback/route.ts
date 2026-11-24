@@ -17,20 +17,20 @@ export async function GET(request: Request) {
 
   const supabase = await createClient();
 
-  // Preferred for email links: works even if opened in another browser/app.
   const token_hash = searchParams.get("token_hash");
   const type = searchParams.get("type") as EmailOtpType | null;
   if (token_hash && type) {
     const { error } = await supabase.auth.verifyOtp({ type, token_hash });
     if (!error) {
-      return NextResponse.redirect(`${origin}${next}`);
+      const destination =
+        type === "recovery" ? "/admin/reset-password" : next;
+      return NextResponse.redirect(`${origin}${destination}`);
     }
     return NextResponse.redirect(
       `${origin}/admin/login?error=auth&detail=${encodeURIComponent(error.message)}`,
     );
   }
 
-  // PKCE flow (same-browser only)
   const code = searchParams.get("code");
   if (code) {
     const { error } = await supabase.auth.exchangeCodeForSession(code);
@@ -44,7 +44,7 @@ export async function GET(request: Request) {
 
   return NextResponse.redirect(
     `${origin}/admin/login?error=auth&detail=${encodeURIComponent(
-      "Missing login code. Request a new magic link and open it in the same browser.",
+      "Missing reset/login code. Request a new password reset from the login page.",
     )}`,
   );
 }

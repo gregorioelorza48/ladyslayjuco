@@ -32,6 +32,7 @@ export async function updateSession(request: NextRequest) {
   const path = request.nextUrl.pathname;
   const isAdminRoute = path.startsWith("/admin");
   const isLoginRoute = path === "/admin/login";
+  const isResetRoute = path === "/admin/reset-password";
 
   if (isAdminRoute && !isLoginRoute) {
     const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase().trim();
@@ -43,7 +44,8 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  if (isLoginRoute && user) {
+  // After password recovery, stay on reset page instead of bouncing to /admin.
+  if (isLoginRoute && user && !isResetRoute) {
     const adminEmail = process.env.ADMIN_EMAIL?.toLowerCase().trim();
     const email = user.email?.toLowerCase().trim();
     if (adminEmail && email === adminEmail) {
